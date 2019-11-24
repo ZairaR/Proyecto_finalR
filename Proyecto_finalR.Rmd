@@ -1,0 +1,37 @@
+---
+title: "Proyecto Final"
+author: "Zaira Romero"
+date: "23/11/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, encoding= "u-tf8")
+```
+
+## 1.Expresiones Regulares
+
+En internet hay infinidad de recursos sobre expresiones regulares manejadas en R, de los cuales se mencionan a continuación dos ejemplos:
+
+[Rpubs](http://rpubs.com/ydmarinb/429756) es un excelente ejemplo positivo de cómo se debe mencionar estas herramientas, ya que aquí se puede ver una explicación detallada. Se comienza con una definición de lo que son las expresiones regulares lo cual es ideal mencionar si el público no tiene conocimiento previo, posteriormente se menciona como están conformadas estas expresiones y por último se van explicando una a una las diferentes sintaxis, haciendo referencia a estos con comentarios que permiten la comprensión de los resultados, por lo cual considero este el mejor material para consultar respecto al tema.
+
+Por otro lado, un ejemplo negativo seria el [Expresiones Regulares]( https://labscn-unalmed.github.io/modulo-R/slides/11_Expresiones_Regulares.html#/), es un documento html donde intentaron hacer un pequeño resumen de las expresiones regulares, pero no lo han realizado de una manera adecuado debido a que ponen muchos ejemplos pero no tiene comentarios sobre lo que están realizando, no escriben ni una pequeña referencia para el publico cobre lo que significa el resultado.
+
+
+En This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
