@@ -9,15 +9,7 @@ output:
     toc_depth: 4
     number_sections: false
 ---
-## Tabla de contenidos:
-1.EXPRESIONES REGULARES
-2.MARKDOWN
-3.ANÁLISIS DE DATOS
-  3.1 Total de delitos por provincia
-  3.2 Top 10 de provincias con más crimenes del 2015 y 2016
-  
  
-
 ```{r setup, include=FALSE}
 library(plyr)
 library(raster)
