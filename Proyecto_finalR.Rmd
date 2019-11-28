@@ -1,37 +1,152 @@
 ---
 title: "Proyecto Final"
-author: "Zaira Romero"
-date: "23/11/2019"
-output: html_document
+author: "Autor: Zaira Ailed Romero Esteban"
+date: "28/11/2019"
+output: 
+  prettydoc::html_pretty:
+    theme: architect 
+    toc: true
+    toc_depth: 4
+    number_sections: false
 ---
+## Tabla de contenidos:
+1.EXPRESIONES REGULARES
+2.MARKDOWN
+3.ANÁLISIS DE DATOS
+  3.1 Total de delitos por provincia
+  3.2 Top 10 de provincias con más crimenes del 2015 y 2016
+  
+ 
 
 ```{r setup, include=FALSE}
+library(plyr)
+library(raster)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(dygraphs)
+library(plotly)
+library(reshape2)
+library(stringr)
 knitr::opts_chunk$set(echo = TRUE, encoding= "u-tf8")
 ```
 
-## 1.Expresiones Regulares
+## _1.EXPRESIONES REGULARES_
 
-En internet hay infinidad de recursos sobre expresiones regulares manejadas en R, de los cuales se mencionan a continuación dos ejemplos:
+<div style="text-align: justify">En internet hay infinidad de recursos sobre expresiones regulares manejadas en R, de los cuales se mencionan a continuación dos ejemplos:
 
-[Rpubs](http://rpubs.com/ydmarinb/429756) es un excelente ejemplo positivo de cómo se debe mencionar estas herramientas, ya que aquí se puede ver una explicación detallada. Se comienza con una definición de lo que son las expresiones regulares lo cual es ideal mencionar si el público no tiene conocimiento previo, posteriormente se menciona como están conformadas estas expresiones y por último se van explicando una a una las diferentes sintaxis, haciendo referencia a estos con comentarios que permiten la comprensión de los resultados, por lo cual considero este el mejor material para consultar respecto al tema.
+<div style="text-align: justify">[__Rpubs__](http://rpubs.com/ydmarinb/429756) es un excelente ejemplo positivo de cómo se debe mencionar estas herramientas, ya que aquí se puede ver una explicación detallada. Se comienza con una definición de lo que son las expresiones regulares lo cual es ideal mencionar si el público no tiene conocimiento previo, posteriormente se menciona como están conformadas estas expresiones y por último se van explicando una a una las diferentes sintaxis, haciendo referencia a estos con comentarios que permiten la comprensión de los resultados, por lo cual considero este el mejor material para consultar respecto al tema.
 
-Por otro lado, un ejemplo negativo seria el [Expresiones Regulares]( https://labscn-unalmed.github.io/modulo-R/slides/11_Expresiones_Regulares.html#/), es un documento html donde intentaron hacer un pequeño resumen de las expresiones regulares, pero no lo han realizado de una manera adecuado debido a que ponen muchos ejemplos pero no tiene comentarios sobre lo que están realizando, no escriben ni una pequeña referencia para el publico cobre lo que significa el resultado.
+<div style="text-align: justify">Por otro lado, un ejemplo negativo sería el [__Expresiones Regulares__]( https://labscn-unalmed.github.io/modulo-R/slides/11_Expresiones_Regulares.html#/), es un documento html donde intentaron hacer un pequeño resumen de las expresiones regulares, pero no lo han realizado de una manera adecuada debido a que ponen muchos ejemplos pero no tiene comentarios sobre lo que están realizando, no escriben ninguna referencia para el publico cobre lo que significa el resultado que dan estas expresiones, lo único interesante es la manera de la presentación con slides.
+
+## _2.MARKDOWN_
+
+<div style="text-align: justify">En [__R para Ciencia de Datos__](https://es.r4ds.hadley.nz/r-markdown.html) se puede observar una explicación muy amplia de lo que es Markdown así que es el recurso ganador, un punto a destacar es la guía de las herramientas básicas y de ejercicios, sin embargo, le falta la parte de mostrar el resultado de la sintaxis de una forma más visual, pero los complementos como tablas, códigos en línea y operaciones lineales si esta muy bien explicado para poder realizar operaciones más avanzadas.
+
+<div style="text-align: justify">Por otra parte,  [__Guía completa markdown y su integración con R__](http://rusersgroup.com/blog/rmarkdown/) es una guía que a comparación de la anterior muestra perfectamente de manera gráfica el resultado de lo que está escribiendo, también tiene muy bien explicada la manera en la que se integran las imágenes, videos, tablas , etc. La única observación negativa es la parte de las ecuaciones, ya que no esta muy bien explicado el cambio que realiza. 
+
+<div style="text-align: justify">En este apartado de Markdown ambas guías tienen puntos a su favor, pero elegiría el primer recurso debido a que la información respecto al tema es mas amplia y mejor explicada con los ejemplos mostrados.
+
+## España
+
+<div style="text-align: justify">España, país de la península ibérica de Europa, incluye 17 regiones autónomas con diversas características geográficas y culturales.En total hay 50 provincias y dos ciudades autónomas que no entran en la división provincial. Estas ciudades son Ceuta y Melilla, situadas en el continente africano a excasos kms de la península. En Madrid, su capital, se encuentra el Palacio Real y el Museo del Prado, que alberga obras de maestros europeos. Segovia tiene un castillo medieval (el Alcázar) y un acueducto romano intacto. La capital de Cataluña, Barcelona, se caracteriza por las obras modernistas extravagantes de Antoni Gaudí, como el templo de la Sagrada Familia. El último censo realizado ha mencionado en el 2019 que hay	46 934 600 hab.
 
 
-En This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r map, echo=FALSE, warning=FALSE,message=FALSE}
+spain <- getData("GADM", country="Spain", level=2)
+spain$random<-rnorm(52,15,3)
+polygon_popup <- paste0("<strong>Provincia: </strong>", spain$NAME_2, "<br>")
+colores <- colorQuantile("Greens", NULL, n = 5)
+map = leaflet() %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(-3.7032540,  40.4167,
+  zoom = 5) %>%
+  addPolygons(data = spain,
+             fillColor= ~colores(random),
+              fillOpacity = 0.4,
+              weight = 2,
+              color = "green",
+              popup = polygon_popup)%>%
+  addControl("Mapa de España",position = "topleft",className = "map-title") %>%
+  addMarkers(lng = -3.7032540, lat= 40.4167)
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+map
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+## _3.ANÁLISIS DE DATOS_
 
-You can also embed plots, for example:
+<div style="text-align: justify">Un *crimen*, de acuerdo a la RAE es una acción indebida o reprensible, partiendo se esta definición a continuación, se presenta un análisis de la cantidad de crímenes que se han presentado en las diferentes provincias de España, referente al a los años 2015 y 2016. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+### 3.1 Total de delitos por provincia
+
+#### Año 2015
+
+A continuación se muestra la gráfica dinámica representativa donde se puede observar el total de delitos que hubo por provincia en el año 2015 
+
+```{r mi_crimen, echo=FALSE}
+mi_crimen <- read.csv("../Proyecto_finalR/Balance de Criminalidad Ene-Dic 2016.csv",
+                     header = T, ";", skip = )
+colnames(mi_crimen)[c(1:5)]<- c("Provincia","Crimen","ano2015","ano2016","Var%")
+
+micrimen <- mi_crimen[grepl("Provincia de.",mi_crimen$Provincia),]
+
+tipo_crimen <- ddply(micrimen, .(Provincia),
+                   summarize, total_2015 = sum(ano2015), 
+                   total_2016 = sum(ano2016))
+
+plot_crimen2015 <- plot_ly(data = tipo_crimen,type = "bar", x = tipo_crimen$Provincia,
+                        y = tipo_crimen$total_2015,
+                        name = tipo_crimen$Provincia, 
+                        span = 30) %>% layout(showlegend = F)
+plot_crimen2015
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+<div style="text-align: justify">Se puede destacar que la provincia donde se han registrado más cantidad de delitos ha sido en _Barcelona_, con un total de crímenes de _395.663K_ lo cual se puede relacionar con el hecho de que es un lugar muy turistico. Barcelona se encuentra en la costa noreste del Mediterráneo.Es la capital de Cataluña, una región del Norte de España que tiene su propia cultura y tradiciones.
+
+<div style="text-align: justify">En segundo lugar, está la provincia de _Valencia_ esta limita con el mar Mediterráneo al este, con un total de crímenes de _140.617K_, esta provincia también es turística pero en una proporción menor en comparación con Barcelona.
+
+#### Año 2016
+
+```{r echo=FALSE}
+plot_crimen2016 <- plot_ly(data = tipo_crimen,type = "bar", x = tipo_crimen$Provincia,
+                          y = tipo_crimen$total_2016,
+                          name = tipo_crimen$Provincia, 
+                          span = 30) %>% layout(showlegend = F)
+plot_crimen2016
+```
+
+
+
+
+### 3.2 Top 10 de provincias con más crimenes del 2015 y 2016
+
+```{r echo=FALSE}
+top10_2015 <- tipo_crimen[order(tipo_crimen$total_2015,decreasing = T),]
+top10_2015 <- data.frame(top10_2015)
+top10_2015 <- head(top10_2015, 10)
+knitr::kable(top10_2015)
+```
+
+
+
+<div style="text-align: justify">Siguiendo con el analisis se puede observar que  la diferencia de los delitos por año entre 2015 y 2016 han variado de manera notable en algunas de las provincias, como lo es en Barcelona con un total de delitos de 351,206 generales.
+
+A continuación se muestra de una manera más visual la diferencia que se ha presentado entre estos dos años.
+
+
+```{r, echo=FALSE}
+
+me <- melt(top10_2015, id.vars = "Provincia")
+      
+c <- ggplot(me, aes(x= Provincia)) + geom_col(aes(y= value, fill= variable),
+                                              position = "dodge") + theme_minimal() + theme(axis.text.x = element_text(angle = 90))+ labs(title = "Total de crimenes por provincia", subtitle = "(año 2015 -2016)", x = "Provincia" , y = "Total de cimenes por año") + scale_y_continuous(name="Total de crimenes por año", labels = scales::comma)
+ c + scale_fill_manual(labels = c("total_2015", "total_2016"), values = c("deeppink4", "darkolivegreen"))
+
+```
+
+
+
+
+
+
